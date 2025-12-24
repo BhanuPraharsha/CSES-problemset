@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define LOCAL // comment out
+
+#ifdef LOCAL
+#define dbg(...) debug_out(#__VA_ARGS__, __VA_ARGS__)
+#else
+#define dbg(...) 0
+#endif
+
+template<typename T> ostream& operator<<(ostream &os, const vector<T> &v) {
+    os << "[";
+    for(size_t i = 0; i < v.size(); i++) {
+        os << v[i]; if(i != v.size()-1) os << ", ";
+    }
+    return os << "]";
+}
+template<typename T> ostream& operator<<(ostream &os, const set<T> &s) {
+    os << "{";
+    size_t i=0; for(auto &x:s){ os << x; if(i!=s.size()-1) os << ", "; i++; }
+    return os << "}";
+}
+template<typename K, typename V> ostream& operator<<(ostream &os, const map<K,V> &m) {
+    os << "{";
+    size_t i=0;
+    for(const auto &pair : m){
+        os << "(" << pair.first << ":" << pair.second << ")";
+        if(i != m.size()-1) os << ", ";
+        i++;
+    }
+    return os << "}";
+}
+template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A,B> &p) {
+    return os << "(" << p.first << "," << p.second << ")";
+}
+
+template<typename T>
+void debug_out(const char* name, T&& arg) { cerr << name << " = " << arg << "\n"; }
+
+template<typename T, typename... Args>
+void debug_out(const char* names, T&& arg, Args&&... args) {
+    const char* comma = strchr(names, ',');
+    cerr.write(names, comma - names) << " = " << arg << " | ";
+    debug_out(comma+1, args...);
+}
+
+struct Timer {
+    chrono::time_point<chrono::steady_clock> start;
+    Timer() { start = chrono::steady_clock::now(); }
+    void print() {
+        auto end = chrono::steady_clock::now();
+        cerr << "[Time elapsed: "
+             << chrono::duration_cast<chrono::milliseconds>(end-start).count()
+             << " ms]\n";
+    }
+};
+
+int gcd(int a, int b) { return b ? gcd(b, a % b) : a; }
+#define mod 1000000007
+// main code
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+
+    vector<vector<long long int>> dp(1000005, vector<long long int>(2, 0LL));
+
+    dp[1][0]=1LL, dp[1][1]=1LL;
+
+    for(int j=2;j<=1000003;j++)
+    {
+        dp[j][0]=(4*dp[j-1][0] + dp[j-1][1])%mod;
+        dp[j][1]=(2*dp[j-1][1] + dp[j-1][0])%mod;
+        dp[j][0]%=mod;
+        dp[j][1]%=mod;
+    }
+
+    // for(int j=0;j<6;j++) dbg(j, dp[j]);
+
+    for(int i = 0; i < t; i++) {
+        int n;
+        cin>>n;
+
+        cout<<(dp[n][0]+dp[n][1])%mod<<endl;
+    }
+
+    return 0;
+}
