@@ -41,6 +41,8 @@ int main() {
         }
     }
 
+    //bfs for monster, to get the minimum distance to reach any specific node in the graph
+
     while(!q.empty())
     {
         int cx=q.front().first, cy=q.front().second;
@@ -55,7 +57,8 @@ int main() {
             }
         }
     }
-    //
+
+    //bfs for A to reach the end of the grid
     q.push({sx,sy});
     parPos[sx][sy]={-1,-1};
     adist[sx][sy]=0;
@@ -84,7 +87,7 @@ int main() {
             int nx=u+dx[j], ny=v+dy[j];
             if(nx>=0 && nx<n && ny>=0 && ny<m && grid[nx][ny]!='#' && adist[nx][ny]==INT_MAX)
             {
-                if(adist[u][v]+1<mdist[nx][ny])
+                if(adist[u][v]+1<mdist[nx][ny]) ////main condition: next block can be reachable iff A can arrive strictly earlier than monster
                 {
                     adist[nx][ny]=adist[u][v]+1;
                     par[nx][ny]=dirs[j];
@@ -94,7 +97,6 @@ int main() {
             }
         }
     }
-
     cout<<"NO"<<endl;
     return 0;
 }
